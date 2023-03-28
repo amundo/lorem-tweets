@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>search some lorem ipsum tweets</title>
+</head>
+<body>
+<form>
+<input name=query type="search"><button>Search</button>
+</form>
+<main>
+
+</main>
+<script>
+let form = document.querySelector('form')
+console.log(form)
+form.addEventListener('submit', async e => {
+  e.preventDefault()
+  let query = form.query.value
+  let response = await fetch(`/tweets/query/${query}`)
+  let data = await response.json()
+  console.log(data)
+
+  document.body.querySelector('main').innerHTML = ``
+
+  data.tweets.forEach(({id,text,user}) => {
+    let div = document.createElement('div')
+    div.classList.add('tweet')
+    div.innerHTML = `
+      <strong>@${user}</strong>
+      <p>${text}</p>
+    `
+    document.body.querySelector('main').append(div)
+  })
+})
+</script>
+</body>
+</html>
